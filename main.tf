@@ -1,8 +1,14 @@
-module "rdp" {
-  source = "./modules/rdp"
+# https://github.com/MicrosoftDocs/windowsserverdocs/blob/master/WindowsServerDocs/remote/remote-desktop-services/clients/rdp-files.md
 
-  filename = "${path.module}/connect.rdp"
-	full_address = "127.0.0.1"
-	username = "Andreas"
+locals {
+	rdp_content = join("\n", [
+		"full address:s:${var.full_address}",
+		"username:s:${var.username}",
+		"domain:s:${var.domain}",
+	])
 }
 
+resource "local_file" "rdp_file" {
+	content     = local.rdp_content
+	filename 	  = var.filename
+}
